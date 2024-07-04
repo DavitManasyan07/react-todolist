@@ -1,4 +1,9 @@
 import React from "react";
+import List from "./List";
+import Add from "./AddBtn";
+import Input from "./Input";
+import Select from "./Select";
+import Clear from "./ClearBtn";
 
 export default class ToDoList extends React.Component {
   constructor(...props) {
@@ -31,113 +36,73 @@ export default class ToDoList extends React.Component {
     });
   };
 
-  render() {
-    let cout = 0;
+  onClickRemove = (el) => {
+    let num = Number(el.target.id.slice(2, el.target.id.length));
+    this.state.list.splice(num - 1, 1);
+    this.setState({
+      list: [...this.state.list],
+    });
+  };
 
+  onClickListBtn = (el) => {
+    let num = Number(el.target.id.slice(2, el.target.id.length));
+    if (this.state.list[num - 1].select) {
+      el.target.className = "listBtn";
+      this.state.list[num - 1].select = false;
+    } else {
+      el.target.className += " text";
+      this.state.list[num - 1].select = true;
+    }
+    this.setState({
+      list: [...this.state.list],
+    });
+  };
+  onClickClear = () => {
+    this.setState({
+      list: [],
+    });
+  };
+  onInp = (el) => {
+    if (el.nativeEvent.data !== null) {
+      this.setState({
+        value: (this.state.value += el.nativeEvent.data),
+      });
+    } else {
+      this.setState({
+        value: this.state.value.slice(0, this.state.value.length - 1),
+      });
+    }
+  };
+  onChangeSelect = (el) => {
+    if (el.target.value === "all") {
+      this.onClickSelect(true, false);
+    } else if (el.target.value === "completed") {
+      this.onClickSelect(false, true);
+    } else if (el.target.value === "uncompleted") {
+      this.onClickSelect(false, false);
+    }
+  };
+
+  render() {
     return (
       <>
         <div className="todo">
-          <button
-            className="clearBtn"
-            onClick={() => {
-              this.setState({
-                list: [],
-              });
-            }}
-          >
-            C
-          </button>
-          <input
-            className="todoInp"
-            value={this.state.value}
-            onKeyDown={(el) => {
-              if (el.code === "Enter") {
-                this.onClickAdd();
-              }
-            }}
-            onInput={(el) => {
-              if (el.nativeEvent.data !== null) {
-                this.setState({
-                  value: (this.state.value += el.nativeEvent.data),
-                });
-              } else {
-                this.setState({
-                  value: this.state.value.slice(0, this.state.value.length - 1),
-                });
-              }
-            }}
-          ></input>
-          <button
-            className="addBtn"
-            onClick={() => {
-              this.onClickAdd();
-            }}
-          >
-            Add
-          </button>
-          <select
-            className="selectNav"
-            onChange={(el) => {
-              if (el.target.value === "all") {
-                this.onClickSelect(true, false);
-              } else if (el.target.value === "completed") {
-                this.onClickSelect(false, true);
-              } else if (el.target.value === "uncompleted") {
-                this.onClickSelect(false, false);
-              }
-            }}
-          >
-            <option value="all">ALL</option>
-            <option value="completed">COMPLETED</option>
-            <option value="uncompleted">UNCOMPLETED</option>
-          </select>
+          <Clear onclick={this.onClickClear} />
+          <Input
+            oninput={this.onInp}
+            inpValue={this.state.value}
+            onClickAdd={this.onClickAdd}
+          />
+          <Add onClickAdd={this.onClickAdd} />
+          <Select onSelect={this.onChangeSelect}/>
         </div>
-
-        <div className="list">
-          {this.state.list.map((element) => {
-            cout++;
-            if (this.state.all || this.state.completed === element.select) {
-              return (
-                <div key={`b0${cout}`} className="listElment">
-                  <button
-                    id={`b1${cout}`}
-                    className={`listBtn ${element.select ? "text" : ""}`}
-                    onClick={(el) => {
-                      let num = Number(
-                        el.target.id.slice(2, el.target.id.length)
-                      );
-                      if (this.state.list[num - 1].select) {
-                        el.target.className = "listBtn";
-                        this.state.list[num - 1].select = false;
-                      } else {
-                        el.target.className += " text";
-                        this.state.list[num - 1].select = true;
-                      }
-                      this.setState({
-                        list: [...this.state.list],
-                      });
-                    }}
-                  >
-                    {element.value}
-                  </button>
-                  <button
-                    className="removeBtn fa fa-trash-o"
-                    id={`b2${cout}`}
-                    onClick={(el) => {
-                      let num = Number(
-                        el.target.id.slice(2, el.target.id.length)
-                      );
-                      this.state.list.splice(num - 1, 1);
-                      this.setState({
-                        list: [...this.state.list],
-                      });
-                    }}
-                  ></button>
-                </div>
-              );
-            }
-          })}
-        </div>
+        <List
+          onclickLB={this.onClickListBtn}
+          onclickRM={this.onClickRemove}
+          list={this.state.list}
+          all={this.state.all}
+          completed={this.state.completed}
+        />
       </>
     );
   }
