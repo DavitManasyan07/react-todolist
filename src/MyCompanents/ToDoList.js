@@ -66,7 +66,6 @@ export default class ToDoList extends React.Component {
   };
 
   onChange = (e) => {
-    console.log(e);
     this.setState({
       value: e.target.value,
     });
@@ -100,7 +99,6 @@ export default class ToDoList extends React.Component {
   };
 
   search = (el) => {
-    console.log(el.target.value);
     if (!el.target.value) {
       this.state.list.map((listEl) => {
         listEl.dontSearch = true;
@@ -123,7 +121,6 @@ export default class ToDoList extends React.Component {
       searchValue: el.target.value,
       list: [...this.state.list],
     });
-    console.log(this.state.list);
   };
 
   editF = () => {
