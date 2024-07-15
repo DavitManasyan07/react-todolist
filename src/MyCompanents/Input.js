@@ -5,18 +5,18 @@ export default class Input extends React.Component {
     super(...props);
   }
 
-  render(){
-    return(
-        <input
-            className="todoInp"
-            value={this.props.inpValue}
-            onKeyDown={(el) => {
-              if (el.code === "Enter") {
-                this.props.onClickAdd();
-              }
-            }}
-            onInput={this.props.oninput}
-          ></input>
-    )
+  render() {
+    return (
+      <input
+        className="todoInp"
+        value={this.props.inpValue}
+        onKeyDown={(el) => {
+          if (el.code === "Enter") {
+            this.props.onClickAdd();
+          }
+        }}
+        onChange={this.props.onchange}
+      ></input>
+    );
   }
 }

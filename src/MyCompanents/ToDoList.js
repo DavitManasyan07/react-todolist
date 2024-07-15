@@ -11,6 +11,7 @@ export default class ToDoList extends React.Component {
     this.state = {
       list: [],
       value: "",
+      searchValue: "",
       all: true,
       completed: false,
     };
@@ -21,6 +22,8 @@ export default class ToDoList extends React.Component {
       this.state.list.push({
         value: this.state.value,
         select: false,
+        dontSearch: true,
+        edit: false,
       });
       this.setState({
         list: [...this.state.list],
@@ -47,32 +50,28 @@ export default class ToDoList extends React.Component {
   onClickListBtn = (el) => {
     let num = Number(el.target.id.slice(2, el.target.id.length));
     if (this.state.list[num - 1].select) {
-      el.target.className = "listBtn";
       this.state.list[num - 1].select = false;
     } else {
-      el.target.className += " text";
       this.state.list[num - 1].select = true;
     }
     this.setState({
       list: [...this.state.list],
     });
   };
+
   onClickClear = () => {
     this.setState({
       list: [],
     });
   };
-  onInp = (el) => {
-    if (el.nativeEvent.data !== null) {
-      this.setState({
-        value: (this.state.value += el.nativeEvent.data),
-      });
-    } else {
-      this.setState({
-        value: this.state.value.slice(0, this.state.value.length - 1),
-      });
-    }
+
+  onChange = (e) => {
+    console.log(e);
+    this.setState({
+      value: e.target.value,
+    });
   };
+
   onChangeSelect = (el) => {
     if (el.target.value === "all") {
       this.onClickSelect(true, false);
@@ -83,25 +82,87 @@ export default class ToDoList extends React.Component {
     }
   };
 
+  onDbCLick = (el) => {
+    this.editF();
+    let num = Number(el.target.id.slice(2, el.target.id.length));
+    this.state.list[num - 1].edit = true;
+    this.setState({
+      list: [...this.state.list],
+    });
+  };
+
+  onListElemInp = (el) => {
+    let num = Number(el.target.id.slice(2, el.target.id.length));
+    this.state.list[num - 1].value = el.target.value;
+    this.setState({
+      list: [...this.state.list],
+    });
+  };
+
+  search = (el) => {
+    this.setState({
+      searchValue: el.target.value,
+    });
+    console.log(this.state.searchValue);
+    if (!this.state.searchValue) {
+      this.state.list.map((listEl) => {
+        listEl.dontSearch = true;
+      });
+      this.setState({
+        list: [...this.state.list],
+      });
+    }
+    this.state.list.map((listEl) => {
+      for (let i = 0; i < this.state.searchValue.length; i++) {
+        if (this.state.searchValue[i] === listEl.value[i]) {
+          listEl.dontSearch = true;
+        } else {
+          listEl.dontSearch = false;
+        }
+      }
+    });
+    this.setState({
+      list: [...this.state.list],
+    });
+    console.log(this.state.list);
+  };
+
+  editF = () => {
+    this.state.list.forEach((el) => {
+      el.edit = false;
+    });
+    this.setState({
+      list: [...this.state.list],
+    });
+  };
+
   render() {
     return (
       <>
         <div className="todo">
           <Clear onclick={this.onClickClear} />
           <Input
-            oninput={this.onInp}
+            onchange={this.onChange}
             inpValue={this.state.value}
             onClickAdd={this.onClickAdd}
           />
           <Add onClickAdd={this.onClickAdd} />
-          <Select onSelect={this.onChangeSelect}/>
+          <Select onSelect={this.onChangeSelect} />
+          <input
+            className="search"
+            placeholder="Search"
+            onInput={this.search}
+          ></input>
         </div>
         <List
+          onEditF={this.editF}
           onclickLB={this.onClickListBtn}
           onclickRM={this.onClickRemove}
           list={this.state.list}
           all={this.state.all}
           completed={this.state.completed}
+          onDbClk={this.onDbCLick}
+          onchange={this.onListElemInp}
         />
       </>
     );

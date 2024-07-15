@@ -10,14 +10,16 @@ body {
 .todo {
   margin: 10px;
   height: 50px;
+  width: 646px;
   display: flex;
+  flex-wrap: wrap;
 }
 .todoInp {
   height: 50px;
   width: 320px;
   font-size: 28px;
 }
-select,
+.selectNav,
 .clearBtn,
 .addBtn {
   height: 56px;
@@ -25,34 +27,29 @@ select,
   background-color: brown;
   color: white;
 }
-.selectNav{
+.selectNav {
   font-size: 24px;
-}
-.selectNav,
-.removeBtn{
   border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
-}
-.listBtn,
-.clearBtn{
-  border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
 }
 
+.clearBtn {
+  border-top-left-radius: 12px;
+}
 
 .list {
   min-width: 400px;
   display: grid;
   place-items: center;
-  margin: 5px;
+  margin: 60px;
 }
 
 .listBtn {
-  height: 50px;
+  max-height: 50px;
   min-width: 320px;
   font-size: 32px;
+  text-align: center;
 }
-
+.completedBtn,
 .removeBtn {
   height: 50px;
   width: 50px;
@@ -60,8 +57,27 @@ select,
   background-color: brown;
   color: white;
 }
+.removeBtn {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.completedBtn {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
 
 .text {
   transition: 0.4s;
   text-decoration-line: line-through;
+}
+.search {
+  font-size: 32px;
+  width: 650px;
+  height: 50px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.listElment {
+  display: flex;
+  margin: 2px;
 }
