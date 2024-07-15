@@ -100,11 +100,8 @@ export default class ToDoList extends React.Component {
   };
 
   search = (el) => {
-    this.setState({
-      searchValue: el.target.value,
-    });
-    console.log(this.state.searchValue);
-    if (!this.state.searchValue) {
+    console.log(el.target.value);
+    if (!el.target.value) {
       this.state.list.map((listEl) => {
         listEl.dontSearch = true;
       });
@@ -113,15 +110,17 @@ export default class ToDoList extends React.Component {
       });
     }
     this.state.list.map((listEl) => {
-      for (let i = 0; i < this.state.searchValue.length; i++) {
-        if (this.state.searchValue[i] === listEl.value[i]) {
+      for (let i = 0; i < el.target.value.length; i++) {
+        if (el.target.value[i] === listEl.value[i]) {
           listEl.dontSearch = true;
         } else {
           listEl.dontSearch = false;
         }
       }
     });
+
     this.setState({
+      searchValue: el.target.value,
       list: [...this.state.list],
     });
     console.log(this.state.list);
