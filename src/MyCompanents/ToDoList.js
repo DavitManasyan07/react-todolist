@@ -1,113 +1,90 @@
-import React from "react";
+import { useState } from "react";
 import List from "./List";
 import Add from "./AddBtn";
 import Input from "./Input";
 import Select from "./Select";
 import Clear from "./ClearBtn";
 
-export default class ToDoList extends React.Component {
-  constructor(...props) {
-    super(...props);
-    this.state = {
-      list: [],
-      value: "",
-      searchValue: "",
-      all: true,
-      completed: false,
-    };
-  }
+export default function ToDoList() {
+  const [list, setList] = useState([]);
+  const [value, setValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [all, setAll] = useState(true);
+  const [completed, setCompleted] = useState(false);
 
-  onClickAdd = () => {
-    if (this.state.value !== "") {
-      this.state.list.push({
-        value: this.state.value,
+  const onClickAdd = () => {
+    if (value !== "") {
+      list.push({
+        value: value,
         select: false,
         dontSearch: true,
         edit: false,
       });
-      this.setState({
-        list: [...this.state.list],
-        value: "",
-      });
+      setList(list);
+      setValue("");
     }
   };
 
-  onClickSelect = (b1, b2) => {
-    this.setState({
-      all: b1,
-      completed: b2,
-    });
+  const onClickSelect = (b1, b2) => {
+    setAll(b1);
+    setCompleted(b2);
   };
 
-  onClickRemove = (el) => {
+  const onClickRemove = (el) => {
     let num = Number(el.target.id.slice(2, el.target.id.length));
-    this.state.list.splice(num - 1, 1);
-    this.setState({
-      list: [...this.state.list],
-    });
+    list.splice(num - 1, 1);
+    setList([...list]);
   };
 
-  onClickListBtn = (el) => {
+  const onClickListBtn = (el) => {
     let num = Number(el.target.id.slice(2, el.target.id.length));
-    if (this.state.list[num - 1].select) {
-      this.state.list[num - 1].select = false;
+    if (list[num - 1].select) {
+      list[num - 1].select = false;
     } else {
-      this.state.list[num - 1].select = true;
+      list[num - 1].select = true;
     }
-    this.setState({
-      list: [...this.state.list],
-    });
+    setList([...list]);
   };
 
-  onClickClear = () => {
-    this.setState({
-      list: [],
-    });
+  const onClickClear = () => {
+    setList([]);
   };
 
-  onChange = (e) => {
-    this.setState({
-      value: e.target.value,
-    });
+  const onChange = (e) => {
+    setValue(e.target.value);
   };
 
-  onChangeSelect = (el) => {
+  const onChangeSelect = (el) => {
     if (el.target.value === "all") {
-      this.onClickSelect(true, false);
+      onClickSelect(true, false);
     } else if (el.target.value === "completed") {
-      this.onClickSelect(false, true);
+      onClickSelect(false, true);
     } else if (el.target.value === "uncompleted") {
-      this.onClickSelect(false, false);
+      onClickSelect(false, false);
     }
   };
 
-  onDbCLick = (el) => {
-    this.editF();
+  const onDbCLick = (el) => {
+    editF();
     let num = Number(el.target.id.slice(2, el.target.id.length));
-    this.state.list[num - 1].edit = true;
-    this.setState({
-      list: [...this.state.list],
-    });
+    list[num - 1].edit = true;
+    setList([...list]);
   };
 
-  onListElemInp = (el) => {
+  const onListElemInp = (el) => {
     let num = Number(el.target.id.slice(2, el.target.id.length));
-    this.state.list[num - 1].value = el.target.value;
-    this.setState({
-      list: [...this.state.list],
-    });
+    list[num - 1].value = el.target.value;
+    setList([...list]);
   };
 
-  search = (el) => {
+  const search = (el) => {
     if (!el.target.value) {
-      this.state.list.map((listEl) => {
+      list.map((listEl) => {
         listEl.dontSearch = true;
       });
-      this.setState({
-        list: [...this.state.list],
-      });
+      setList([...list]);
     }
-    this.state.list.map((listEl) => {
+    list.map((listEl) => {
       for (let i = 0; i < el.target.value.length; i++) {
         if (el.target.value[i] === listEl.value[i]) {
           listEl.dontSearch = true;
@@ -116,51 +93,38 @@ export default class ToDoList extends React.Component {
         }
       }
     });
-
-    this.setState({
-      searchValue: el.target.value,
-      list: [...this.state.list],
-    });
+    setList([...list]);
+    setSearchValue(el.target.value);
   };
 
-  editF = () => {
-    this.state.list.forEach((el) => {
+  const editF = () => {
+    list.forEach((el) => {
       el.edit = false;
     });
-    this.setState({
-      list: [...this.state.list],
-    });
+    setList([...list]);
   };
 
-  render() {
-    return (
-      <>
-        <div className="todo">
-          <Clear onclick={this.onClickClear} />
-          <Input
-            onchange={this.onChange}
-            inpValue={this.state.value}
-            onClickAdd={this.onClickAdd}
-          />
-          <Add onClickAdd={this.onClickAdd} />
-          <Select onSelect={this.onChangeSelect} />
-          <input
-            className="search"
-            placeholder="Search"
-            onInput={this.search}
-          ></input>
-        </div>
-        <List
-          onEditF={this.editF}
-          onclickLB={this.onClickListBtn}
-          onclickRM={this.onClickRemove}
-          list={this.state.list}
-          all={this.state.all}
-          completed={this.state.completed}
-          onDbClk={this.onDbCLick}
-          onchange={this.onListElemInp}
-        />
-      </>
-    );
-  }
+  console.log(23);
+
+  return (
+    <>
+      <div className="todo">
+        <Clear onclick={onClickClear} />
+        <Input onchange={onChange} inpValue={value} onClickAdd={onClickAdd} />
+        <Add onClickAdd={onClickAdd} />
+        <Select onSelect={onChangeSelect} />
+        <input className="search" placeholder="Search" onInput={search}></input>
+      </div>
+      <List
+        onEditF={editF}
+        onclickLB={onClickListBtn}
+        onclickRM={onClickRemove}
+        list={list}
+        all={all}
+        completed={completed}
+        onDbClk={onDbCLick}
+        onchange={onListElemInp}
+      />
+    </>
+  );
 }
