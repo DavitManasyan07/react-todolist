@@ -25,7 +25,8 @@ export default function List(props) {
                   }
                 }}
                 onChange={props.onchange}
-                type={element.edit ? "text" : "button"}
+                type="text"
+                readOnly={!element.edit}
                 id={`b2${cout}`}
                 value={element.value}
                 className={`listBtn ${element.select ? "text" : ""}`}
