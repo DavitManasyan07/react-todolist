@@ -8,7 +8,6 @@ import Clear from "./ClearBtn";
 export default function ToDoList() {
   const [list, setList] = useState([]);
   const [value, setValue] = useState("");
-  const [searchValue, setSearchValue] = useState("");
   const [all, setAll] = useState(true);
   const [completed, setCompleted] = useState(false);
 
@@ -94,7 +93,6 @@ export default function ToDoList() {
       }
     });
     setList([...list]);
-    setSearchValue(el.target.value);
   };
 
   const editF = () => {
