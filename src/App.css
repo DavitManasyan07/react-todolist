@@ -30,10 +30,12 @@ body {
 .selectNav {
   font-size: 24px;
   border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .clearBtn {
   border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
 }
 
 .list {
@@ -69,13 +71,6 @@ body {
 .text {
   transition: 0.4s;
   text-decoration-line: line-through;
-}
-.search {
-  font-size: 32px;
-  width: 650px;
-  height: 50px;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
 }
 .listElment {
   display: flex;

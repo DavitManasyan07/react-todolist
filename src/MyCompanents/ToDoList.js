@@ -1,26 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import List from "./List";
 import Add from "./AddBtn";
 import Input from "./Input";
 import Select from "./Select";
 import Clear from "./ClearBtn";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, done, remove, removeAll } from "./ToDoSlice";
 
 export default function ToDoList() {
-  const [list, setList] = useState([]);
+  const todo = useSelector((state) => state.todo.items);
+  const dispatch = useDispatch();
+
+  const [list, setList] =  useState([]) 
   const [value, setValue] = useState("");
   const [all, setAll] = useState(true);
   const [completed, setCompleted] = useState(false);
 
+useEffect(() => {
+setList(todo)
+},[todo])
+  
   const onClickAdd = () => {
     if (value !== "") {
-      list.push({
-        value: value,
-        select: false,
-        dontSearch: true,
-        edit: false,
-      });
-      setList(list);
-      setValue("");
+      dispatch(addItem(value));
+      setValue("")
     }
   };
 
@@ -30,23 +33,15 @@ export default function ToDoList() {
   };
 
   const onClickRemove = (el) => {
-    let num = Number(el.target.id.slice(2, el.target.id.length));
-    list.splice(num - 1, 1);
-    setList([...list]);
+    dispatch(remove(el.target.id));
   };
 
   const onClickListBtn = (el) => {
-    let num = Number(el.target.id.slice(2, el.target.id.length));
-    if (list[num - 1].select) {
-      list[num - 1].select = false;
-    } else {
-      list[num - 1].select = true;
-    }
-    setList([...list]);
+    dispatch(done(el.target.id));
   };
 
   const onClickClear = () => {
-    setList([]);
+    dispatch(removeAll());
   };
 
   const onChange = (e) => {
@@ -63,47 +58,6 @@ export default function ToDoList() {
     }
   };
 
-  const onDbCLick = (el) => {
-    editF();
-    let num = Number(el.target.id.slice(2, el.target.id.length));
-    list[num - 1].edit = true;
-    setList([...list]);
-  };
-
-  const onListElemInp = (el) => {
-    let num = Number(el.target.id.slice(2, el.target.id.length));
-    list[num - 1].value = el.target.value;
-    setList([...list]);
-  };
-
-  const search = (el) => {
-    if (!el.target.value) {
-      list.map((listEl) => {
-        listEl.dontSearch = true;
-      });
-      setList([...list]);
-    }
-    list.map((listEl) => {
-      for (let i = 0; i < el.target.value.length; i++) {
-        if (el.target.value[i] === listEl.value[i]) {
-          listEl.dontSearch = true;
-        } else {
-          listEl.dontSearch = false;
-        }
-      }
-    });
-    setList([...list]);
-  };
-
-  const editF = () => {
-    list.forEach((el) => {
-      el.edit = false;
-    });
-    setList([...list]);
-  };
-
-  console.log(23);
-
   return (
     <>
       <div className="todo">
@@ -111,17 +65,13 @@ export default function ToDoList() {
         <Input onchange={onChange} inpValue={value} onClickAdd={onClickAdd} />
         <Add onClickAdd={onClickAdd} />
         <Select onSelect={onChangeSelect} />
-        <input className="search" placeholder="Search" onInput={search}></input>
       </div>
       <List
-        onEditF={editF}
         onclickLB={onClickListBtn}
         onclickRM={onClickRemove}
         list={list}
         all={all}
         completed={completed}
-        onDbClk={onDbCLick}
-        onchange={onListElemInp}
       />
     </>
   );
